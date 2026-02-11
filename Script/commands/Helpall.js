@@ -1,12 +1,13 @@
 const fs = require("fs-extra");
 const request = require("request");
+const path = require("path");
 
 module.exports.config = {
  name: "helpall",
- version: "4.0.0",
+ version: "5.0.0",
  hasPermssion: 0,
- credits: "Belal YT",
- description: "চোখ ধাঁধানো প্রিমিয়াম মাস্টার কমান্ড লিস্ট",
+ credits: "BELAL BOTX666",
+ description: "Clean and Simple Master Command List",
  commandCategory: "system",
  usages: "[No args]",
  cooldowns: 5
@@ -26,21 +27,21 @@ module.exports.run = async function ({ api, event }) {
 
  const sig = "┄┉❈✡️⋆⃝চাঁদেড়~পাহাড়✿⃝🪬❈┉┄";
  
- // মেইন ডিজাইন শুরু
- let finalText = `✨ ━━━ 🛸 𝐁𝐄𝐋𝐀𝐋 𝐁𝐎𝐓 𝐗𝟔𝟔𝟔 🛸 ━━━ ✨\n\n`;
+ // মেইন ডিজাইন শুরু (সাধারণ ইংরেজি ফন্ট)
+ let finalText = `--- BELAL BOT X666 ---\n\n`;
 
  for (const category in categories) {
-    finalText += `⚡──『 ${category.toUpperCase()} 』──⚡\n`;
-    // কমান্ডগুলোকে বুলেট পয়েন্ট দিয়ে সাজানো
-    const cmdList = categories[category].map(cmd => `  🔹 ${cmd}`).join("\n");
+    finalText += `[ ${category.toUpperCase()} ]\n`;
+    // কমান্ডগুলোকে লিস্ট আকারে সাজানো
+    const cmdList = categories[category].sort().map(cmd => `> ${cmd}`).join("\n");
     finalText += `${cmdList}\n\n`;
  }
 
- finalText += `━━━━━━━━━━━━━━━━━━━━━━━\n`;
- finalText += `👤 𝐎𝐰𝐧𝐞𝐫: ${sig}\n`;
- finalText += `📊 𝐓𝐨𝐭𝐚𝐥 𝐒𝐤𝐢𝐥𝐥𝐬: ${commands.size} Units\n`;
- finalText += `🛡️ 𝐒𝐭𝐚𝐭𝐮𝐬: Active & Secure\n`;
- finalText += `━━━━━━━━━━━━━━━━━━━━━━━`;
+ finalText += `--------------------------\n`;
+ finalText += `Owner: ${sig}\n`;
+ finalText += `Total: ${commands.size} Commands\n`;
+ finalText += `Status: Active & Secure\n`;
+ finalText += `--------------------------`;
 
  // আপনার স্পেশাল ইমেজ লিঙ্ক
  const backgrounds = [
@@ -49,7 +50,9 @@ module.exports.run = async function ({ api, event }) {
  ];
  
  const selectedBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
- const imgPath = __dirname + "/cache/helpallbg.jpg";
+ const cacheDir = path.join(__dirname, "cache");
+ if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir);
+ const imgPath = path.join(cacheDir, `helpall_${Date.now()}.jpg`);
 
  const callback = () =>
  api.sendMessage({ 
@@ -61,6 +64,6 @@ module.exports.run = async function ({ api, event }) {
 
  request(encodeURI(selectedBg))
  .pipe(fs.createWriteStream(imgPath))
- .on("close", () => callback());
+ .on("close", callback);
 };
   
